@@ -1,0 +1,5 @@
+com\example\ramaisapi\repository\RangeRepository.class
+com\example\ramaisapi\model\Range.class
+com\example\ramaisapi\repository\RamalRepository.class
+com\example\ramaisapi\model\Ramal.class
+com\example\ramaisapi\RamaisApiApplication.class

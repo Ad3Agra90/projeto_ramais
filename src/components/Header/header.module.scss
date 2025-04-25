@@ -1,0 +1,226 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 22vh;
+  background: linear-gradient(90deg, #ffffff 0%, #1d832a 100%);
+  padding: 0 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 8px rgba(70, 130, 180, 0.4);
+}
+
+header:hover {
+  background: linear-gradient(90deg, #ffffff 0%, #1d832a 100%);
+  box-shadow: 0 6px 12px rgba(58, 110, 165, 0.6);
+}
+
+.boxLogo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 270px;
+  height: 14vh;
+}
+.boxLogo img {
+  width: 80%;
+  transition: transform 0.3s ease;
+}
+.boxLogo img:hover {
+  transform: scale(1.05);
+}
+.boxLogo h1 {
+  color: #ffffff;
+  margin-left: 1rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  user-select: none;
+}
+
+.menu ul {
+  width: 30vw;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.menu ul li a {
+  color: #000000;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.menu ul li a:hover,
+.menu ul li a:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #000000;
+  outline: none;
+}
+
+.loginArea {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #000000;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.loginButton {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.logoutButton:hover {
+  color: #a71d2a;
+}
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modalContent h2 {
+  margin-bottom: 1rem;
+  color: #333333;
+}
+
+.modalContent form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modalContent input {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1.5px solid #000000;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.modalContent input:focus {
+  border-color: #3A6EA5;
+  box-shadow: 0 0 8px rgba(58, 110, 165, 0.6);
+}
+
+.modalContent button {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.modalContent button[type="submit"] {
+  background-color: #cc3e3e;
+  color: white;
+}
+
+.modalContent button[type="submit"]:hover {
+  background-color: #165f1a;
+}
+
+.modalContent button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+.modalContent button[type="button"]:hover {
+  background-color: #999;
+}
+
+@media (min-width: 300px) and (max-width: 1060px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    padding: 1rem 0;
+  }
+  .boxLogo {
+    margin-top: 1rem;
+    width: auto;
+    justify-content: center;
+  }
+  .boxLogo img {
+    width: 60%;
+  }
+  h1 {
+    width: auto;
+    text-align: center;
+    padding-left: 0;
+    margin-top: 0.5rem;
+  }
+  .menu ul {
+    height: auto;
+    width: 80vw;
+    justify-content: space-around;
+  }
+  header div {
+    margin: 1rem 0;
+    height: auto;
+    width: 90vw;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 410px) {
+  .menu ul li a {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
