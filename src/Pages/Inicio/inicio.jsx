@@ -17,11 +17,11 @@ export default function Inicio({ loggedUser }) {
 
   const carregarRamais = async () => {
     try {
-      const response = await api.get('/ramais');
-      console.log('Ramais fetched:', response.data);
+      const response = await api.get('/extensions');
+      console.log('Extensions fetched:', response.data);
       setRamais(response.data);
     } catch (error) {
-      console.error('Erro ao buscar ramais:', error);
+      console.error('Erro ao buscar extensions:', error);
     }
   };
 
@@ -31,7 +31,7 @@ export default function Inicio({ loggedUser }) {
         alert('Por favor, faça login primeiro.');
         return;
       }
-      await api.post(`/ramais/login/${id}`, { usuario: loggedUser });
+      await api.post(`/extensions/login/${id}`, { user: loggedUser });
       carregarRamais();
     } catch (error) {
       console.error('Erro ao fazer login:', error);
@@ -45,7 +45,7 @@ export default function Inicio({ loggedUser }) {
         alert('Senha incorreta.');
         return;
       }
-      await api.post(`/ramais/logout/${id}`);
+      await api.post(`/extensions/logout/${id}`);
       carregarRamais();
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
@@ -53,11 +53,11 @@ export default function Inicio({ loggedUser }) {
   };
 
   const ramaisFiltrados = ramais.filter(r => {
-    const filtroTexto = r.numero.includes(filtro) || (r.usuario && r.usuario.toLowerCase().includes(filtro.toLowerCase()));
+    const filtroTexto = r.extension_number.includes(filtro) || (r.user && r.user.toLowerCase().includes(filtro.toLowerCase()));
     if (statusFiltro === 'ocupados') {
-      return filtroTexto && r.usuario !== null;
+      return filtroTexto && r.user !== null;
     } else if (statusFiltro === 'disponiveis') {
-      return filtroTexto && r.usuario === null;
+      return filtroTexto && r.user === null;
     } else {
       return filtroTexto;
     }
@@ -109,17 +109,17 @@ export default function Inicio({ loggedUser }) {
           {ramaisFiltrados.length > 0 ? (
             ramaisFiltrados.map(ramal => (
               <tr key={ramal.id}>
-                <td>{ramal.numero}</td>
-                <td>{ramal.usuario || '---'}</td>
+                <td>{ramal.extension_number}</td>
+                <td>{ramal.user || '---'}</td>
                 <td>
-                  {ramal.logado ? (
+                  {ramal.logged_user ? (
                     <span className={S['status-logado']}>Logado</span>
                   ) : (
                     <span className={S['status-disponivel']}>Disponível</span>
                   )}
                 </td>
                 <td>
-                  {ramal.logado ? (
+                  {ramal.logged_user ? (
                     <button className={`${S.btn} ${S.logout}`} onClick={() => fazerLogout(ramal.id)}>Logout</button>
                   ) : (
                     <button className={`${S.btn} ${S.login}`} onClick={() => fazerLogin(ramal.id)}>Login</button>

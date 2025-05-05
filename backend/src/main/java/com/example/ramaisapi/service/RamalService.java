@@ -46,10 +46,10 @@ public class RamalService {
         return ramalRepository.findAll().stream()
                 .filter(r -> {
                     try {
-                        int num = Integer.parseInt(r.getNumero());
+                        int num = Integer.parseInt(r.getExtension_number());
                         return num >= range.getStart() && num <= range.getEnd();
                     } catch (NumberFormatException e) {
-                        logger.warn("Número inválido no ramal: {}", r.getNumero());
+                        logger.warn("Número inválido no ramal: {}", r.getExtension_number());
                         return false;
                     }
                 })
@@ -96,26 +96,26 @@ public class RamalService {
                 .forEach(id -> {
                     Ramal ramal = new Ramal();
                     ramal.setId(id);
-                    ramal.setNumero(String.valueOf(id));
-                    ramal.setUsuario(null);
-                    ramal.setLogado(false);
+                    ramal.setExtension_number(String.valueOf(id));
+                    ramal.setUser(null);
+                    ramal.setLogged_user(null);
                     ramalRepository.save(ramal);
                 });
     }
 
-    public Ramal login(int id, String usuario) {
+    public Ramal login(int id, String user) {
         Ramal ramal = ramalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
-        ramal.setUsuario(usuario);
-        ramal.setLogado(true);
+        ramal.setUser(user);
+        ramal.setLogged_user(true);
         return ramalRepository.save(ramal);
     }
 
     public Ramal logout(int id) {
         Ramal ramal = ramalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
-        ramal.setUsuario(null);
-        ramal.setLogado(false);
+        ramal.setUser(null);
+        ramal.setLogged_user(null);
         return ramalRepository.save(ramal);
     }
 }

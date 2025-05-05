@@ -47,21 +47,21 @@ public class RamalController {
         return ResponseEntity.ok(savedRange);
     }
     
-    @GetMapping("/ramais")
-    public ResponseEntity<List<Ramal>> getRamais() {
-        logger.info("GET /ramais called");
-        List<Ramal> ramais = ramalService.getRamais();
-        logger.info("Number of ramais returned: {}", ramais.size());
-        return ResponseEntity.ok(ramais);
+    @GetMapping("/extensions")
+    public ResponseEntity<List<Ramal>> getExtensions() {
+        logger.info("GET /extensions called");
+        List<Ramal> extensions = ramalService.getRamais();
+        logger.info("Number of extensions returned: {}", extensions.size());
+        return ResponseEntity.ok(extensions);
     }
     
-    @PostMapping("/ramais/login/{id}")
+    @PostMapping("/extensions/login/{id}")
     public ResponseEntity<Ramal> login(@PathVariable int id, @RequestBody UserRequest userRequest) {
-        Ramal ramal = ramalService.login(id, userRequest.getUsuario());
+        Ramal ramal = ramalService.login(id, userRequest.getUser());
         return ResponseEntity.ok(ramal);
     }
 
-    @PostMapping("/ramais/logout/{id}")
+    @PostMapping("/extensions/logout/{id}")
     public ResponseEntity<Ramal> logout(@PathVariable int id) {
         Ramal ramal = ramalService.logout(id);
         return ResponseEntity.ok(ramal);
@@ -108,14 +108,14 @@ public class RamalController {
     }
     
     public static class UserRequest {
-        private String usuario;
+        private String user;
 
-        public String getUsuario() {
-            return usuario;
+        public String getUser() {
+            return user;
         }
 
-        public void setUsuario(String usuario) {
-            this.usuario = usuario;
+        public void setUser(String user) {
+            this.user = user;
         }
     }
 }

@@ -5,13 +5,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ramais")
+@Table(name = "extensions")
 public class Ramal {
     @Id
     private Integer id;
-    private String numero;
-    private String usuario;
-    private boolean logado;
+    private String extension_number;
+    private String user;
+    private Boolean logged_user; // Changed to Boolean to allow null
 
     public Integer getId() {
         return id;
@@ -21,27 +21,27 @@ public class Ramal {
         this.id = id;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getExtension_number() {
+        return extension_number;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setExtension_number(String extension_number) {
+        this.extension_number = extension_number;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getUser() {
+        return user;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public boolean isLogado() {
-        return logado;
+    public Boolean getLogged_user() {
+        return logged_user;
     }
 
-    public void setLogado(boolean logado) {
-        this.logado = logado;
+    public void setLogged_user(Boolean logged_user) {
+        this.logged_user = logged_user;
     }
 }
