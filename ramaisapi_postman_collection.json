@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "RamaisAPI",
+    "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
+    "description": "Postman collection for testing RamaisAPI with updated /extensions endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/range",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "range"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Set Range",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"start\": 1000,\n  \"end\": 1010,\n  \"user\": \"admin\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/range",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "range"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Extensions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/extensions",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "extensions"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login Extension",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user\": \"testuser\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/extensions/login/1001",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "extensions", "login", "1001"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout Extension",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/extensions/logout/1001",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "extensions", "logout", "1001"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Logs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/logs",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "logs"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
