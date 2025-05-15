@@ -103,19 +103,32 @@ public class RamalService {
                 });
     }
 
-    public Ramal login(int id, String user) {
-        Ramal ramal = ramalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
-        ramal.setUser(user);
-        ramal.setLogged_user(true);
-        return ramalRepository.save(ramal);
+public Ramal login(int id, String user) {
+    Ramal ramal = ramalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
+    if (ramal.getLogged_user() != null && ramal.getLogged_user()) {
+        throw new RuntimeException("Ramal está ocupado");
     }
+    ramal.setUser(user);
+    ramal.setLogged_user(true);
+    return ramalRepository.save(ramal);
+}
 
-    public Ramal logout(int id) {
-        Ramal ramal = ramalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
+public Ramal logout(int id) {
+    Ramal ramal = ramalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
+    ramal.setUser(null);
+    ramal.setLogged_user(null);
+    return ramalRepository.save(ramal);
+}
+
+@Transactional
+public void logoutAllByUser(String user) {
+    List<Ramal> ramais = ramalRepository.findByUser(user);
+    for (Ramal ramal : ramais) {
         ramal.setUser(null);
         ramal.setLogged_user(null);
-        return ramalRepository.save(ramal);
+        ramalRepository.save(ramal);
     }
+}
 }

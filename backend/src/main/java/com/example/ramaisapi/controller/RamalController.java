@@ -67,6 +67,12 @@ public class RamalController {
         return ResponseEntity.ok(ramal);
     }
 
+    @PostMapping("/extensions/logoutAll/{user}")
+    public ResponseEntity<Void> logoutAllByUser(@PathVariable String user) {
+        ramalService.logoutAllByUser(user);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/logs")
     public ResponseEntity<List<com.example.ramaisapi.model.LogEntry>> getLogs() {
         logger.info("GET /logs called");

@@ -6,10 +6,23 @@ const api = axios.create({
   baseURL: 'http://localhost:8080/api'
 });
 
+function RamalBusyModal({ onReturn }) {
+  return (
+    <div className={S.modalBackdrop}>
+      <div className={S.modalContent}>
+        <h2>Ramal Ocupado</h2>
+        <p>Infelizmente, o ramal está ocupado.</p>
+        <button onClick={onReturn}>Voltar para consulta de ramais</button>
+      </div>
+    </div>
+  );
+}
+
 export default function Inicio({ loggedUser }) {
   const [ramais, setRamais] = useState([]);
   const [filtro, setFiltro] = useState('');
   const [statusFiltro, setStatusFiltro] = useState('todos'); // 'todos', 'ocupados', 'disponiveis'
+  const [busyModalOpen, setBusyModalOpen] = useState(false);
 
   useEffect(() => {
     carregarRamais();
@@ -31,6 +44,14 @@ export default function Inicio({ loggedUser }) {
         alert('Por favor, faça login primeiro.');
         return;
       }
+      // Update ramais before login attempt
+      await carregarRamais();
+      const ramal = ramais.find(r => r.id === id);
+      if (ramal && ramal.logged_user) {
+        alert('O ramal que você está tentando logar está ocupado. Por favor, tente outro.');
+        setBusyModalOpen(true);
+        return;
+      }
       await api.post(`/extensions/login/${id}`, { user: loggedUser });
       carregarRamais();
     } catch (error) {
@@ -38,30 +59,58 @@ export default function Inicio({ loggedUser }) {
     }
   };
 
+  const handleRamalClick = async (id) => {
+    // Store clicked ramal id for login attempt
+    const clickedRamalId = id;
+    // Update ramais list
+    await carregarRamais();
+    const ramal = ramais.find(r => r.id === clickedRamalId);
+    if (ramal && ramal.logged_user) {
+      setBusyModalOpen(true);
+    } else {
+      fazerLogin(clickedRamalId);
+    }
+  };
+
   const fazerLogout = async (id) => {
     try {
-      const senha = prompt('Digite a senha para logout:');
-      if (senha !== '1234') {
-        alert('Senha incorreta.');
+      // Update ramais before logout attempt
+      await carregarRamais();
+      const ramal = ramais.find(r => r.id === id);
+      if (ramal && ramal.user === loggedUser) {
+        await api.post(`/extensions/logout/${id}`);
+        carregarRamais();
         return;
       }
-      await api.post(`/extensions/logout/${id}`);
-      carregarRamais();
+      if (ramal && ramal.user !== loggedUser) {
+        const senha = prompt('Digite a senha para logout:');
+        if (senha !== '1234') {
+          alert('Senha incorreta.');
+          return;
+        }
+        await api.post(`/extensions/logout/${id}`);
+        carregarRamais();
+      }
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     }
   };
 
-  const ramaisFiltrados = ramais.filter(r => {
-    const filtroTexto = r.extension_number.includes(filtro) || (r.user && r.user.toLowerCase().includes(filtro.toLowerCase()));
-    if (statusFiltro === 'ocupados') {
-      return filtroTexto && r.user !== null;
-    } else if (statusFiltro === 'disponiveis') {
-      return filtroTexto && r.user === null;
-    } else {
-      return filtroTexto;
-    }
-  });
+  const handleReturn = () => {
+    setBusyModalOpen(false);
+  };
+
+  const ramaisFiltrados = ramais
+    .filter(r => {
+      const filtroTexto = r.extension_number.includes(filtro) || (r.user && r.user.toLowerCase().includes(filtro.toLowerCase()));
+      if (statusFiltro === 'ocupados') {
+        return filtroTexto && r.user !== null;
+      } else if (statusFiltro === 'disponiveis') {
+        return filtroTexto && r.user === null;
+      } else {
+        return filtroTexto;
+      }
+    });
 
   return (
     <main className={S.container}>
@@ -122,7 +171,7 @@ export default function Inicio({ loggedUser }) {
                   {ramal.logged_user ? (
                     <button className={`${S.btn} ${S.logout}`} onClick={() => fazerLogout(ramal.id)}>Logout</button>
                   ) : (
-                    <button className={`${S.btn} ${S.login}`} onClick={() => fazerLogin(ramal.id)}>Login</button>
+                    <button className={`${S.btn} ${S.login}`} onClick={() => handleRamalClick(ramal.id)}>Login</button>
                   )}
                 </td>
               </tr>
@@ -132,6 +181,7 @@ export default function Inicio({ loggedUser }) {
           )}
         </tbody>
       </table>
+      {busyModalOpen && <RamalBusyModal onReturn={handleReturn} />}
     </main>
   );
 }

@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import logo from '../../assets/img/logo.png';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Inicio from '../../Pages/Inicio/inicio';
 import Configuracao from '../../Pages/Configuracao/configuracao';
 import PageLog from '../../Pages/PageLog/pagelog';
 import S from './header.module.scss';
+
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api'
+});
 
 function LoginModal({ onClose, onLogin, initialName }) {
   const [name, setName] = useState(initialName || '');
@@ -38,14 +43,31 @@ function LoginModal({ onClose, onLogin, initialName }) {
 }
 
 export default function Header() {
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState(() => {
+    return localStorage.getItem('userName') || '';
+  });
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (userName) {
+      localStorage.setItem('userName', userName);
+    } else {
+      localStorage.removeItem('userName');
+    }
+  }, [userName]);
 
   const handleLoginClick = () => {
     setLoginModalOpen(true);
   };
 
-  const handleLogoutClick = () => {
+  const handleLogoutClick = async () => {
+    if (userName) {
+      try {
+        await api.post(`/extensions/logoutAll/${userName}`);
+      } catch (error) {
+        console.error('Erro ao deslogar ramais:', error);
+      }
+    }
     setUserName('');
   };
 
