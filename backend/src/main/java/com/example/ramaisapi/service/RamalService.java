@@ -4,6 +4,7 @@ import com.example.ramaisapi.model.Ramal;
 import com.example.ramaisapi.model.Range;
 import com.example.ramaisapi.repository.RamalRepository;
 import com.example.ramaisapi.repository.RangeRepository;
+import com.example.ramaisapi.service.NotificationService;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class RamalService {
 
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @PostConstruct
     public void init() {
@@ -103,32 +107,37 @@ public class RamalService {
                 });
     }
 
-public Ramal login(int id, String user) {
-    Ramal ramal = ramalRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
-    if (ramal.getLogged_user() != null && ramal.getLogged_user()) {
-        throw new RuntimeException("Ramal está ocupado");
+    public Ramal login(int id, String user) {
+        Ramal ramal = ramalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
+        if (ramal.getLogged_user() != null && ramal.getLogged_user()) {
+            throw new RuntimeException("Ramal está ocupado");
+        }
+        ramal.setUser(user);
+        ramal.setLogged_user(true);
+        Ramal savedRamal = ramalRepository.save(ramal);
+        notificationService.sendUpdate("/topic/ramais", savedRamal);
+        return savedRamal;
     }
-    ramal.setUser(user);
-    ramal.setLogged_user(true);
-    return ramalRepository.save(ramal);
-}
 
-public Ramal logout(int id) {
-    Ramal ramal = ramalRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
-    ramal.setUser(null);
-    ramal.setLogged_user(null);
-    return ramalRepository.save(ramal);
-}
-
-@Transactional
-public void logoutAllByUser(String user) {
-    List<Ramal> ramais = ramalRepository.findByUser(user);
-    for (Ramal ramal : ramais) {
+    public Ramal logout(int id) {
+        Ramal ramal = ramalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ramal não encontrado"));
         ramal.setUser(null);
         ramal.setLogged_user(null);
-        ramalRepository.save(ramal);
+        Ramal savedRamal = ramalRepository.save(ramal);
+        notificationService.sendUpdate("/topic/ramais", savedRamal);
+        return savedRamal;
     }
-}
+
+    @Transactional
+    public void logoutAllByUser(String user) {
+        List<Ramal> ramais = ramalRepository.findByUser(user);
+        for (Ramal ramal : ramais) {
+            ramal.setUser(null);
+            ramal.setLogged_user(null);
+            Ramal savedRamal = ramalRepository.save(ramal);
+            notificationService.sendUpdate("/topic/ramais", savedRamal);
+        }
+    }
 }

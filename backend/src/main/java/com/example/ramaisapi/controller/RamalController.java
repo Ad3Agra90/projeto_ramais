@@ -61,6 +61,13 @@ public class RamalController {
         return ResponseEntity.ok(ramal);
     }
 
+    @PostMapping("/extensions/login/windows")
+    public ResponseEntity<String> windowsLogin(@RequestHeader(value = "X-Remote-User", required = false) String remoteUser) {
+        String username = remoteUser != null ? remoteUser : "anonymous";
+        logger.info("Windows login user from header: {}", username);
+        return ResponseEntity.ok(username);
+    }
+
     @PostMapping("/extensions/logout/{id}")
     public ResponseEntity<Ramal> logout(@PathVariable int id) {
         Ramal ramal = ramalService.logout(id);

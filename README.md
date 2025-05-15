@@ -87,15 +87,15 @@ Importe este arquivo no Postman para acessar todos os endpoints configurados par
 
 A API possui os seguintes endpoints principais:
 
-| Método | Endpoint                           | Descrição                                       |
-|--------|------------------------------------|-------------------------------------------------|
-| GET    | `/api/range`                       | Retorna o intervalo atual configurado.          |
-| POST   | `/api/range`                       | Define um novo intervalo.                       |
-| GET    | `/api/extensions`                  | Lista todos os ramais (extensões).              |
-| POST   | `/api/extensions/login/{id}`       | Realiza login de um usuário em um ramal.        |
-| POST   | `/api/extensions/logout/{id}`      | Realiza logout de um ramal específico.          |
-| POST   | `/api/extensions/logoutAll/{user}` | Realiza logout de todos os ramais de um usuário.|
-| GET    | `/api/logs`                        | Retorna os logs de ações realizadas.            |
+| Método | Endpoint                           | Descrição                                        |
+|--------|------------------------------------|--------------------------------------------------|
+| GET    | `/api/range`                       | Retorna o intervalo atual configurado.           |
+| POST   | `/api/range`                       | Define um novo intervalo.                        |
+| GET    | `/api/extensions`                  | Lista todos os ramais (extensões).               |
+| POST   | `/api/extensions/login/{id}`       | Realiza login de um usuário em um ramal.         |
+| POST   | `/api/extensions/logout/{id}`      | Realiza logout de um ramal específico.           |
+| POST   | `/api/extensions/logoutAll/{user}` | Realiza logout de todos os ramais de um usuário. |
+| GET    | `/api/logs`                        | Retorna os logs de ações realizadas.             |
 
 ### Exemplos de uso
 
@@ -198,10 +198,11 @@ O backend é estruturado da seguinte forma:
       // Endpoints para gerenciar ramais, intervalos e logs
   }
   ```
-- `service/`: Contém a lógica de negócio da aplicação, como manipulação de ramais e logs.
+- `service/`: Contém a lógica de negócio da aplicação, como manipulação de ramais e logs, além de suporte a WebSocket para notificações em tempo real.
 - `repository/`: Interfaces para acesso a dados via JPA, responsáveis por operações no banco.
 - `model/`: Entidades JPA que representam as tabelas do banco de dados.
 - `exception/`: Tratamento global de exceções para a API.
+- `config/`: Configurações de segurança e WebSocket.
 
 ---
 
@@ -213,12 +214,16 @@ O backend é estruturado da seguinte forma:
 - Spring Data JPA
 - MySQL Connector
 - Lombok
+- Spring Security (para autenticação integrada com Windows)
+- Spring WebSocket (para notificações em tempo real)
 
 ### Frontend
 - React 19
 - Vite
 - Axios
 - Sass
+- @stomp/stompjs
+- sockjs-client
 
 ---
 

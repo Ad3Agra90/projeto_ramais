@@ -1,5 +1,12 @@
 com\example\ramaisapi\repository\RangeRepository.class
+com\example\ramaisapi\config\SecurityConfig.class
 com\example\ramaisapi\model\Range.class
 com\example\ramaisapi\repository\RamalRepository.class
+com\example\ramaisapi\repository\LogEntryRepository.class
+com\example\ramaisapi\service\LogService.class
 com\example\ramaisapi\model\Ramal.class
 com\example\ramaisapi\RamaisApiApplication.class
+com\example\ramaisapi\service\NotificationService.class
+com\example\ramaisapi\exception\GlobalExceptionHandler.class
+com\example\ramaisapi\config\WebSocketConfig.class
+com\example\ramaisapi\model\LogEntry.class

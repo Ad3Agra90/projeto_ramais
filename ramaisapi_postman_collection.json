@@ -2,7 +2,7 @@
   "info": {
     "name": "RamaisAPI",
     "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
-    "description": "Postman collection for testing RamaisAPI with updated /extensions endpoints",
+    "description": "Postman collection for testing RamaisAPI with updated /extensions endpoints and WebSocket notifications",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -95,6 +95,21 @@
           "host": ["localhost"],
           "port": "8080",
           "path": ["api", "extensions", "logout", "1001"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout All Extensions by User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/extensions/logoutAll/testuser",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "extensions", "logoutAll", "testuser"]
         }
       },
       "response": []

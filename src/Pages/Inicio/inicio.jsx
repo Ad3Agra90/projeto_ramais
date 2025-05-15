@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import S from './inicio.module.scss';
 
 const api = axios.create({
@@ -23,9 +25,49 @@ export default function Inicio({ loggedUser }) {
   const [filtro, setFiltro] = useState('');
   const [statusFiltro, setStatusFiltro] = useState('todos'); // 'todos', 'ocupados', 'disponiveis'
   const [busyModalOpen, setBusyModalOpen] = useState(false);
+  const stompClient = useRef(null);
 
   useEffect(() => {
     carregarRamais();
+  }, []);
+
+  useEffect(() => {
+    // Setup WebSocket connection
+    const socket = new SockJS('http://localhost:8080/ws');
+    stompClient.current = new Client({
+      webSocketFactory: () => socket,
+      debug: (str) => {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      onConnect: () => {
+        stompClient.current.subscribe('/topic/ramais', (message) => {
+          const updatedRamal = JSON.parse(message.body);
+          setRamais(prevRamais => {
+            const index = prevRamais.findIndex(r => r.id === updatedRamal.id);
+            if (index !== -1) {
+              const newRamais = [...prevRamais];
+              newRamais[index] = updatedRamal;
+              return newRamais;
+            } else {
+              return [...prevRamais, updatedRamal];
+            }
+          });
+        });
+      },
+      onStompError: (frame) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
+      }
+    });
+    stompClient.current.activate();
+
+    // Cleanup on unmount
+    return () => {
+      if (stompClient.current) {
+        stompClient.current.deactivate();
+      }
+    };
   }, []);
 
   const carregarRamais = async () => {
